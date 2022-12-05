@@ -1,0 +1,5 @@
+{
+    "require": {
+        "image-charts/image-charts": "^6.1"
+    }
+}
