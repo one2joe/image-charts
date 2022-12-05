@@ -1,61 +1,55 @@
 <?php
 $c = [
-	"type" => "bar",
+	"type" => 'bar',
 	"data" => [
-	  "labels" => [
-		"January", "February", "March", "April", "May", "June", "July"
-	  ],
+	  "labels" => ['Attend', 'Referral', 'Thank', 'Visitor', '121', 'CEU'],
 	  "datasets" => [
 		[
-		  "label" => "Score",
+		  "label" => 'Current',
 		  "backgroundColor" => [
-			"rgb(255, 99, 132)", "rgb(255, 159, 64)", "rgb(255, 205, 86)", "rgb(75, 192, 192)", "rgb(54, 162, 235)", "rgb(153, 102, 255)", "rgb(255, 99, 132)"
+			'rgb(200, 200, 200)',
+			'rgb(200, 200, 200)',
+			'rgb(200, 200, 200)',
+			'rgb(200, 200, 200)',
+			'rgb(200, 200, 200)',
+			'rgb(200, 200, 200)',
 		  ],
-		  "yAxisID" => "y",
-		  "data" => [
-			226, 16, -44, 84, -11, -14, 25
-		  ]
+		  "data" => [15, 10, 15, 0, 0, 20],
 		],
 		[
-		  "label" => "Current",
-		  "backgroundColor" => "rgb(201, 203, 207)",
-		  "yAxisID" => "y1",
-		  "data" => [
-			-61, 21, -68, -50, -56, 89, -95
-		  ]
-		]
-	  ]
+		  "label" => 'Step 1',
+		  "backgroundColor" => 'rgb(54, 162, 235)',
+		  "data" => [0, 5, 0, 10, 15, 0],
+		],
+		[
+		  "label" => 'Step 2',
+		  "backgroundColor" => 'rgb(75, 192, 192)',
+		  "data" => [0, 0, 0 , 10, 5, 0],
+		],
+	  ],
 	],
 	"options" => [
 	  "title" => [
 		"display" => true,
-		"text" => "Member Traffic Light"
-	  ],
-	  "tooltips" => [
-		"mode" => "index",
-		"intersect" => true
+		"text" => 'Member Traffic Light',
 	  ],
 	  "scales" => [
+		"xAxes" => [
+		  [
+			"stacked" => true,
+		  ],
+		],
 		"yAxes" => [
 		  [
-			"id" => "y",
-			"type" => "linear",
-			"display" => true,
-			"position" => "left"
-		  ],
-		  [
-			"id" => "y1",
-			"type" => "linear",
-			"display" => true,
-			"position" => "right",
-			"gridLines" => [
-			  "drawOnChartArea" => false
+			"stacked" => true,
+			"ticks" => [
+				"stepSize" => 5
 			]
-		  ]
-		]
-	  ]
-	]
-];
+		  ],
+		],
+	  ],
+	],
+  ];
 $c = json_encode($c);
 $data = [
     'bkg' => 'white',
@@ -67,11 +61,12 @@ $file = 'chart.png';
 file_put_contents($file, file_get_contents($url));
 // exit;
 $image = imagecreatefrompng($file);
-$cropped = imagecrop($image, ['x' => 0, 'y' => 12, 'width' => imagesx($image), 'height' => imagesy($image)]);
+$cropped = imagecrop($image, ['x' => 0, 'y' => 12, 'width' => imagesx($image), 'height' => imagesy($image) - 12]);
 if ($cropped !== FALSE) {
     // imagepng($cropped, "cropped_{$file}");
     imagepng($cropped, $file);
     imagedestroy($cropped);
 }
 imagedestroy($image);
+if (!empty($_GET['output']) AND $_GET['output'] == 'html') die("<img src=\"chart.png\">");
 ?>
